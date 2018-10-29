@@ -15,6 +15,7 @@ app.use('/', router);
 app.use('/api/broker', broker);
 app.use('/api/account', account);
 
+
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost/broker-base', { useNewUrlParser: true, promiseLibrary: require('bluebird') })
