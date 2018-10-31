@@ -4,6 +4,10 @@ var mongoose = require('mongoose');
 var User = require('../../models/User.js');
 var UserSession = require('../../models/UserSession.js');
 
+router.get('/test', function(req, res, next) {
+  res.send('Express REST API');
+});
+
 router.get('/verify', function(req, res, next) {
   // Get the token
   const { query } = req;
@@ -38,6 +42,7 @@ router.get('/verify', function(req, res, next) {
 
 router.post('/signin', function(req, res, next) {
   const { body } = req;
+  console.log("body", body);
   const {
     password
   } = body;
@@ -57,6 +62,10 @@ router.post('/signin', function(req, res, next) {
     });
   }
 
+  User.find({}, function(err, users) {
+    console.log(users.length); 
+  });
+
   username = username.trim();
   User.find({
       username: username
@@ -68,7 +77,9 @@ router.post('/signin', function(req, res, next) {
         message: 'Error: server error'
       });
     }
+    console.log('users: ', users.length);
     if (users.length != 1) {
+      console.log('err username');
       return res.send({
         success: false,
         message: 'Error: Invalid'
@@ -76,6 +87,7 @@ router.post('/signin', function(req, res, next) {
     }
     const user = users[0];
     if (!user.validPassword(password)) {
+      console.log('err password');
       return res.send({
         success: false,
         message: 'Error: Invalid'
