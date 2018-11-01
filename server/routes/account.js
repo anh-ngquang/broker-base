@@ -62,10 +62,6 @@ router.post('/signin', function(req, res, next) {
     });
   }
 
-  User.find({}, function(err, users) {
-    console.log(users.length); 
-  });
-
   username = username.trim();
   User.find({
       username: username
@@ -77,7 +73,6 @@ router.post('/signin', function(req, res, next) {
         message: 'Error: server error'
       });
     }
-    console.log('users: ', users.length);
     if (users.length != 1) {
       console.log('err username');
       return res.send({

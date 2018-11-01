@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem } from "react-bootstrap";
+import { IndexLinkContainer } from "react-router-bootstrap";
 import Routes from '../routes.js';
 import SignIn from './SignIn';
 import '../css/App.css';
 import {
-  setInStorage,
-  getFromStorage,
+  setInStorage
 } from '../utils/storage';
 
 class App extends Component {
@@ -14,42 +14,31 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      token: ''
+      isLoading: false,
+      isAuthenticated: false
     };
   }
 
-  componentDidMount() {
-    const obj = getFromStorage('broker_base');
-    if (obj && obj.token) {
-      const { token } = obj;
-      // Verify token
-      fetch('/api/account/verify?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.setState({
-              token,
-              isLoading: false
-            });
-          } else {
-            this.setState({
-              isLoading: false,
-            });
-          }
-        });
-    } else {
-      this.setState({
-        isLoading: false,
-      });
-    }
+  userHasAuthenticated = authenticated => {
+    this.setState({ isAuthenticated: authenticated });
+  }
+
+  handleLogout = event => {
+    setInStorage('broker_base', { token: '' });
+    this.userHasAuthenticated(false);
+    this.props.history.push("/signin");
   }
 
   render() {
 
+    const childProps = {
+      isAuthenticated: this.state.isAuthenticated,
+      userHasAuthenticated: this.userHasAuthenticated
+    };
+
     const {
       isLoading,
-      token
+      isAuthenticated
     } = this.state;
 
     if (isLoading) {
@@ -65,27 +54,31 @@ class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
-          {token 
+          {isAuthenticated 
           ? <Navbar.Collapse>
           <Nav pullRight>
-            <NavItem href="/filter">Filter</NavItem>
-            <NavItem href="/">Import</NavItem>
+            <IndexLinkContainer to="/">
+              <NavItem>Filter</NavItem>
+            </IndexLinkContainer>
+            <IndexLinkContainer to="/import">
+              <NavItem>Import</NavItem>
+            </IndexLinkContainer>
             <NavDropdown title="Tools" id="basic-nav-dropdown">
-              <MenuItem href="/">Action</MenuItem>
+              <IndexLinkContainer to="/">
+                <MenuItem>Action</MenuItem>
+              </IndexLinkContainer>
               <MenuItem>Another action</MenuItem>
             </NavDropdown>
+            <NavItem onClick={this.handleLogout}>Logout</NavItem>
           </Nav>
         </Navbar.Collapse>
-        : <Navbar.Toggle />
+        : <Navbar.Toggle/>
         }
         </Navbar>
-        {token 
-          ? <Routes />
-          : <SignIn />
-        }
+        <Routes childProps={childProps} />
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);

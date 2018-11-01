@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import {
+  setInStorage
+} from '../utils/storage';
 import '../css/SignIn.css';
 
 export default class SignIn extends Component {
@@ -11,7 +15,8 @@ export default class SignIn extends Component {
       isLoading: false,
       signInError: '',
       username: "",
-      password: ""
+      password: "",
+      isSignedIn: false
     };
   }
 
@@ -45,10 +50,33 @@ export default class SignIn extends Component {
       username: username,
       password: password,
     })
-      .then(function (response) {
-        console.log('response', response);
+      .then(response => {
+
+        console.log('response data: ', response.data);
+
+        if (response.data.success) {
+          setInStorage('broker_base', { token: response.data.token });
+          this.setState({
+            signInError: response.data.message,
+            isLoading: false,
+            token: response.data.token,
+            isSignedIn: true
+          });
+
+        } else {
+          this.setState({
+            signInError: response.data.message,
+            isLoading: false,
+          });
+        }
+
       })
-      .catch(function (error) {
+      .catch(error => {
+
+        this.setState({
+          isLoading: false,
+        });
+
         console.log('error', error);
       });
     
@@ -63,14 +91,18 @@ export default class SignIn extends Component {
       password
     } = this.state;
 
+    if (this.state.isSignedIn === true) {
+      return <Redirect to='/' />
+    }
+
     return (
       <div className="SignIn">
+        <form onSubmit={this.handleSubmit}>
         {
           (signInError) ? (
-            <p>{signInError}</p>
+            <p className="text-danger">{signInError}</p>
           ) : (null)
         }
-        <form onSubmit={this.handleSubmit}>
           <FormGroup controlId="username" bsSize="large">
             <ControlLabel>Username</ControlLabel>
             <FormControl
@@ -91,7 +123,7 @@ export default class SignIn extends Component {
           <Button
             block
             bsSize="large"
-            disabled={isLoading && !this.validateForm()}
+            disabled={isLoading || !this.validateForm()}
             type="submit"
           >
             Sign In
