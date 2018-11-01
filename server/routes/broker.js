@@ -15,6 +15,11 @@ router.post('/import', function(req, res, next) {
     batchCode
   } = body;
 
+  var importedRowCount = 0;
+  var currentRow = 0;
+  
+  // for each row:
+
   // convert rowData to Broker model
 
   // check db for existing record based on Phone number
