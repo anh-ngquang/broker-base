@@ -1,0 +1,10 @@
+@media all and (min-width: 480px) {
+    .Import {
+      padding: 60px 0;
+    }
+  
+    .Import form {
+      margin: 0 auto;
+      max-width: 320px;
+    }
+  }
