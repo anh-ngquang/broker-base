@@ -11,7 +11,7 @@ class Import extends Component {
         super(props);
 
         this.state = {
-            fromSite: "",
+            fromSite: "batdongsan.com.vn",
             importBatchCode: "",
             importRows: [],
             isLoading: false

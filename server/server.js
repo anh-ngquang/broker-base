@@ -10,7 +10,7 @@ var User = require('../models/User');
 
 var app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 app.set('view engine', 'ejs');

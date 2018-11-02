@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const commonUtils = require('../server/utils/common');
 
 const BrokerSchema = new mongoose.Schema({
     name: { type: String, default: '' },
@@ -26,14 +27,43 @@ const BrokerSchema = new mongoose.Schema({
 });
 
 BrokerSchema.methods.fromSiteExelRow = function (sitename, rowData) {
-
+    var importBroker;
+    console.log(sitename);
+    switch (sitename) {
+        case 'batdongsan.com.vn':
+            try {
+                var siteBroker = new BDSCOMVNBroker(rowData);
+                console.log(siteBroker);
+            } catch (e) {
+                console.log(e);
+                throw "Parse error";
+            }
+            break;
+        default:
+            break;
+    }
 }
 
 // Site's broker model
 
 // Batdongsan.com.vn
 function BDSCOMVNBroker(excelRowData) {
-    
+    try {
+        console.log(excelRowData);
+        this.name = excelRowData[0];
+        this.address = excelRowData[1];
+        this.phone = commonUtils.convertToPhoneNumber(excelRowData[2]);
+        this.areas = excelRowData[3];
+        this.email = excelRowData[4];
+
+        if (!commonUtils.isPhoneNumber(this.phone)) {
+            throw "Phone number invalid";
+        }
+
+    } catch (e) {
+        console.log('error: ', e);
+        throw "Parse data error";
+    }
 }
 
 module.exports = mongoose.model('Broker', BrokerSchema);

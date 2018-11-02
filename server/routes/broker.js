@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Broker = require('../../models/Broker.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,6 +15,15 @@ router.post('/import', function(req, res, next) {
     rowsData,
     batchCode
   } = body;
+
+  if (rowsData.length > 0) {
+    var importBroker = new Broker();
+    try {
+      importBroker.fromSiteExelRow(siteName, rowsData[1]);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   var importedRowCount = 0;
   var currentRow = 0;
@@ -45,7 +55,8 @@ router.post('/import', function(req, res, next) {
       // response
   
       return res.send({
-        success: true
+        success: true,
+        totalUploadedRows: rowsData.length
       });
 });
 
