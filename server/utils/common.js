@@ -13,5 +13,8 @@ export function convertToPhoneNumber(string) {
 }
 
 export function convertPhoneNumberToTenDigits(string) {
-    
+    var str = String(string);
+    if (str.startsWith("01")) {
+        return str;
+    }
 }
