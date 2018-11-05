@@ -19,7 +19,8 @@ router.post('/import', function(req, res, next) {
   if (rowsData.length > 0) {
     var importBroker = new Broker();
     try {
-      importBroker.fromSiteExelRow(siteName, rowsData[1]);
+      importBroker.fromSiteExelRow(siteName, rowsData[5]);
+      console.log("Import Broker: ", importBroker);
     } catch (e) {
       console.log(e);
     }
