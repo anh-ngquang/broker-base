@@ -1545,7 +1545,7 @@ eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ \"./node_modules/css-loader/lib/css-base.js\")(false);\n// imports\n\n\n// module\nexports.push([module.i, \"@media all and (min-width: 480px) {\\n    .Import {\\n      padding: 60px 0;\\n    }\\n  \\n    .Import form {\\n      margin: 0 auto;\\n      max-width: 320px;\\n    }\\n  }\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./client/css/Import.css?./node_modules/css-loader");
+eval("exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ \"./node_modules/css-loader/lib/css-base.js\")(false);\n// imports\n\n\n// module\nexports.push([module.i, \"@media all and (min-width: 480px) {\\n    .Import {\\n      padding: 20px 0;\\n    }\\n  \\n    .Import form {\\n      margin: 0 auto;\\n      max-width: 320px;\\n    }\\n  }\", \"\"]);\n\n// exports\n\n\n//# sourceURL=webpack:///./client/css/Import.css?./node_modules/css-loader");
 
 /***/ }),
 
