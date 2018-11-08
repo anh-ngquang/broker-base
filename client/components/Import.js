@@ -25,6 +25,10 @@ class Import extends Component {
     handleSubmit = event => {
         event.preventDefault() // Stop form submit
 
+        this.setState({
+            isLoading: true
+        });
+
         const {
             fromSite,
             importBatchCode,
@@ -44,16 +48,22 @@ class Import extends Component {
                     isLoading: false
                 });
 
+                alert("Import success!\n\nTotal uploaded: " + response.data.totalUploadedRows + "\nTotal imported: " + response.data.totalImportedRows);
+
             } else {
                 this.setState({
                     isLoading: false,
                 });
+
+                alert("Import error: ", response.data.error);
             }
 
         }).catch(error => {
             this.setState({
                 isLoading: false,
             });
+
+            alert("Import error: ", error);
 
             console.log('error', error);
         });
@@ -77,6 +87,8 @@ class Import extends Component {
     }
 
     render() {
+
+        var importBtnTitle = (this.state.isLoading == true) ? "Importing ..." : "Import";
 
         return (
             <div className="Import">
@@ -113,7 +125,7 @@ class Import extends Component {
                         type="submit"
                         disabled={this.state.isLoading || !this.validateForm()}
                     >
-                        Import
+                        {importBtnTitle}
                      </Button>
                 </form>
             </div>

@@ -165,7 +165,8 @@ router.post('/import', async function (req, res, next) {
 
   return res.send({
     success: true,
-    totalUploadedRows: importedRowCount
+    totalUploadedRows: rowsData.length - 1,
+    totalImportedRows: importedRowCount
   });
 });
 
