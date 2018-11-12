@@ -58,18 +58,18 @@ class App extends Component {
           ? <Navbar.Collapse>
           <Nav pullRight>
             <IndexLinkContainer to="/">
-              <NavItem>Filter</NavItem>
+              <NavItem>Danh bạ</NavItem>
             </IndexLinkContainer>
             <IndexLinkContainer to="/import">
-              <NavItem>Import</NavItem>
+              <NavItem>Nhập dữ liệu</NavItem>
             </IndexLinkContainer>
-            <NavDropdown title="Tools" id="basic-nav-dropdown">
+            <NavDropdown title="Công cụ" id="basic-nav-dropdown">
               <IndexLinkContainer to="/">
                 <MenuItem>Action</MenuItem>
               </IndexLinkContainer>
               <MenuItem>Another action</MenuItem>
             </NavDropdown>
-            <NavItem onClick={this.handleLogout}>Logout</NavItem>
+            <NavItem onClick={this.handleLogout}>Đăng xuất</NavItem>
           </Nav>
         </Navbar.Collapse>
         : <Navbar.Toggle/>

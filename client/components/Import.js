@@ -41,21 +41,21 @@ class Import extends Component {
             batchCode: importBatchCode
         }).then(response => {
 
-            console.log('response data: ', response.data);
+            // console.log('response data: ', response.data);
 
             if (response.data.success) {
                 this.setState({
                     isLoading: false
                 });
 
-                alert("Import success!\n\nTotal uploaded: " + response.data.totalUploadedRows + "\nTotal imported: " + response.data.totalImportedRows);
+                alert("Nhập dữ liệu thành công!\n\nTổng số tải lên: " + response.data.totalUploadedRows + "\nTổng số nhập vào CSDL: " + response.data.totalImportedRows);
 
             } else {
                 this.setState({
                     isLoading: false,
                 });
 
-                alert("Import error: ", response.data.error);
+                alert("Nhập lỗi: ", response.data.error);
             }
 
         }).catch(error => {
@@ -63,9 +63,9 @@ class Import extends Component {
                 isLoading: false,
             });
 
-            alert("Import error: ", error);
+            alert("Nhập lỗi: ", error);
 
-            console.log('error', error);
+            // console.log('error', error);
         });
     }
 
@@ -76,7 +76,7 @@ class Import extends Component {
             this.setState({
                 importRows: rows
             });
-            console.log(this.state.importRows);
+            // console.log(this.state.importRows);
         })
     }
 
@@ -88,22 +88,22 @@ class Import extends Component {
 
     render() {
 
-        var importBtnTitle = (this.state.isLoading == true) ? "Importing ..." : "Import";
+        var importBtnTitle = (this.state.isLoading == true) ? "Đang nhập ..." : "Nhập";
 
         return (
             <div className="Import">
+                <h1>Nhập dữ liệu môi giới</h1>
                 <form onSubmit={this.handleSubmit}>
-                    <h1>Import Broker List</h1>
                     <br />
                     <FormGroup controlId="file" bsSize="large">
-                        <ControlLabel>File to import:</ControlLabel>
+                        <ControlLabel>File dữ liệu:</ControlLabel>
                         <FormControl
                             onChange={this.handleFileChange}
                             type="file"
                         />
                     </FormGroup>
                     <FormGroup controlId="fromSite">
-                        <ControlLabel>From site:</ControlLabel>
+                        <ControlLabel>Nguồn:</ControlLabel>
                         <FormControl onChange={this.handleInputChange} componentClass="select" placeholder="select">
                             <option value="batdongsan.com.vn">Batdongsan.com.vn</option>
                             <option value="mangnhadat.com.vn">Mangnhadat.com.vn</option>
@@ -112,7 +112,7 @@ class Import extends Component {
                         </FormControl>
                     </FormGroup>
                     <FormGroup controlId="importBatchCode">
-                        <ControlLabel>Import Batch Code:</ControlLabel>
+                        <ControlLabel>Mã đợt nhập:</ControlLabel>
                         <FormControl
                             type="text"
                             value={this.state.importBatchCode}

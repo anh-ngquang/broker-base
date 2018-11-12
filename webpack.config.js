@@ -1,6 +1,7 @@
 //webpack.config.js
 var path = require('path');
 var webpack = require('webpack');
+
 module.exports = {
   mode: 'development',
  entry: './client/index.js',

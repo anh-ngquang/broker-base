@@ -1,0 +1,15 @@
+@media all and (min-width: 480px) {
+    .Filter {
+      padding: 20px 0;
+      margin: 0 auto;
+      max-width: 1366px;
+    }
+
+    h1 {
+        text-align: center;
+    }
+  
+    .Filter form {
+      margin: 0 auto;
+    }
+  }
