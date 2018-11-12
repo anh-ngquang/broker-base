@@ -6,8 +6,10 @@ import { areaOptions, brokerTypeOptions, propertyTypeOptions } from '../utils/co
 import {
   getFromStorage,
 } from '../utils/storage';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 import '../css/Filter.css';
+import '../../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
 class Filter extends Component {
   constructor(props) {
@@ -52,6 +54,18 @@ class Filter extends Component {
       isLoading,
       token
     } = this.state;
+
+    const products = [];
+    const columns = [{
+      dataField: 'id',
+      text: 'Product ID'
+    }, {
+      dataField: 'name',
+      text: 'Product Name'
+    }, {
+      dataField: 'price',
+      text: 'Product Price'
+    }];
 
     if (isLoading) {
       return (<div><p>Loading...</p></div>);
@@ -105,6 +119,9 @@ class Filter extends Component {
               Lọc
           </Button>
           </Form>
+        </Col>
+        <Col md={9}>
+          <BootstrapTable wrapperClasses={"brokerTable"} keyField='id' data={products} columns={columns} />
         </Col>
 
       </div>

@@ -12,4 +12,8 @@
     .Filter form {
       margin: 0 auto;
     }
+
+    .brokerTable {
+        padding-top: 25px;
+    }
   }
