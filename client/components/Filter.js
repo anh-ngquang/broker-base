@@ -55,16 +55,19 @@ class Filter extends Component {
       token
     } = this.state;
 
-    const products = [];
+    const brokers = [];
     const columns = [{
-      dataField: 'id',
-      text: 'Product ID'
-    }, {
       dataField: 'name',
-      text: 'Product Name'
+      text: 'Tên'
     }, {
-      dataField: 'price',
-      text: 'Product Price'
+      dataField: 'phone',
+      text: 'Số điện thoại'
+    }, {
+      dataField: 'email',
+      text: 'Email'
+    }, {
+      dataField: 'areas',
+      text: 'Khu vực'
     }];
 
     if (isLoading) {
@@ -121,7 +124,7 @@ class Filter extends Component {
           </Form>
         </Col>
         <Col md={9}>
-          <BootstrapTable wrapperClasses={"brokerTable"} keyField='id' data={products} columns={columns} />
+          <BootstrapTable wrapperClasses={"brokerTable"} keyField='id' data={brokers} columns={columns} />
         </Col>
 
       </div>
