@@ -29,3 +29,10 @@ export const propertyTypeOptions = [
     { value: 'đất', label: 'Đất' },
     { value: 'kho bãi', label: 'Kho bãi' },
 ];
+
+export const sourceOptions = [
+    { value: 'batdongsan.com.vn', label: 'Batdongsan.com.vn' },
+    { value: 'mangnhadat.com.vn', label: 'Mangnhadat.com.vn' },
+    { value: 'alonhadat.com.vn', label: 'Alonhadat.com.vn' },
+    { value: 'homedy.com', label: 'Homedy.com' }
+];

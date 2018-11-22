@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Button, Form, FormGroup, FormControl, ControlLabel, Col } from "react-bootstrap";
 import Select from 'react-select';
-import { areaOptions, brokerTypeOptions, propertyTypeOptions } from '../utils/constant';
+import { areaOptions, brokerTypeOptions, propertyTypeOptions, sourceOptions } from '../utils/constant';
 import {
   getFromStorage,
 } from '../utils/storage';
@@ -17,6 +17,10 @@ class Filter extends Component {
     this.state = {
       isLoading: true,
       token: '',
+      filterArea: [],
+      filterBrokerType: [],
+      filterPropertyType: [],
+      filterSource: []
     };
   }
 
@@ -49,6 +53,26 @@ class Filter extends Component {
     }
   }
 
+  handleFilterAreaChange = (selectedOption) => {
+    this.setState({ filterArea: selectedOption });
+  }
+
+  handleFilterBrokerTypeChange = (selectedOption) => {
+    this.setState({ filterBrokerType: selectedOption });
+  }
+
+  handleFilterPropertyTypeChange = (selectedOption) => {
+    this.setState({ filterPropertyType: selectedOption });
+  }
+
+  handleFilterSourceChange = (selectedOption) => {
+    this.setState({ filterSource: selectedOption });
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+  }
+
   render() {
     const {
       isLoading,
@@ -68,6 +92,9 @@ class Filter extends Component {
     }, {
       dataField: 'areas',
       text: 'Khu vực'
+    }, {
+      dataField: 'sources',
+      text: 'Nguồn'
     }];
 
     if (isLoading) {
@@ -86,30 +113,47 @@ class Filter extends Component {
 
         <Col md={3}>
           <Form onSubmit={this.handleSubmit}>
-            <FormGroup controlId="formInlineArea">
+            <FormGroup controlId="filterArea">
               <ControlLabel>Khu vực: </ControlLabel>
               <Select
+                value={this.state.filterArea}
+                onChange={this.handleFilterAreaChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={areaOptions}
                 placeholder="Chọn..."
               />
             </FormGroup>
-            <FormGroup controlId="formInlineBrokerType">
+            <FormGroup controlId="filterBrokerType">
               <ControlLabel>Loại hình môi giới: </ControlLabel>
               <Select
+                value={this.state.filterBrokerType}
+                onChange={this.handleFilterChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={brokerTypeOptions}
                 placeholder="Chọn..."
               />
             </FormGroup>
-            <FormGroup controlId="formInlinePropertyType">
+            <FormGroup controlId="filterPropertyType">
               <ControlLabel>Loại hình BĐS: </ControlLabel>
               <Select
+                value={this.state.filterPropertyType}
+                onChange={this.handleFilterChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={propertyTypeOptions}
+                placeholder="Chọn..."
+              />
+            </FormGroup>
+            <FormGroup controlId="filterSource">
+              <ControlLabel>Nguồn: </ControlLabel>
+              <Select
+                value={this.state.filterSource}
+                onChange={this.handleFilterChange}
+                closeMenuOnSelect={false}
+                isMulti
+                options={sourceOptions}
                 placeholder="Chọn..."
               />
             </FormGroup>
