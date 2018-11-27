@@ -61,7 +61,7 @@ router.post('/import', async function (req, res, next) {
       // if not exists
       // INSERT NEW RECORD
       importBroker.created_date = new Date();
-      importBroker.save(function (err) {
+      await importBroker.save(function (err) {
         if (err) {
           importError = err;
           return;
@@ -167,6 +167,77 @@ router.post('/import', async function (req, res, next) {
     success: true,
     totalUploadedRows: rowsData.length - 1,
     totalImportedRows: importedRowCount
+  });
+});
+
+// Filter broker from DB
+router.post('/filter', async function (req, res, next) {
+  const { body } = req;
+
+  const {
+    filterArea,
+    filterBrokerType,
+    filterPropertyType,
+    filterSource
+  } = body;
+
+  // console.log(body);
+  let findQuery = {}
+
+  // AREA FILTER
+  if (filterArea && filterArea.length > 0) {
+    let areaRegexText = filterArea.map(e => e.value).join("|");
+    findQuery.areas_lowercase = { $regex: areaRegexText }
+  }
+
+  // BROKER TYPE AND PROPERTY TYPE FILTER
+  let brokerTypeListRegexText = '';
+  if (filterBrokerType && filterBrokerType.length > 0) {
+    brokerTypeListRegexText = filterBrokerType.map(e => e.value).join("|");
+  }
+
+  let propertyTypeListRegexText = '';
+  if (filterPropertyType && filterPropertyType.length > 0) {
+    propertyTypeListRegexText = filterPropertyType.map(e => e.value).join("|");
+  }
+
+  let brokerAndPropertyRegexText = '';
+  if (brokerTypeListRegexText != '') {
+    brokerAndPropertyRegexText += '(?=.*?(' + brokerTypeListRegexText + '))';
+  }
+  if (propertyTypeListRegexText != '') {
+    brokerAndPropertyRegexText += '(?=.*?(' + propertyTypeListRegexText + '))';
+  }
+  //console.log("brokerAndPropertyRegexText: ", brokerAndPropertyRegexText);
+  if (brokerAndPropertyRegexText != '') {
+    findQuery.all_properties_lowercase = { $regex: brokerAndPropertyRegexText }
+  }
+
+  // SOURCE FILTER
+  if (filterSource && filterSource.length > 0) {
+    let sourceRegexText = filterSource.map(e => e.value).join("|");
+    findQuery.sources = { $regex: sourceRegexText }
+  }
+
+  await Broker.find(findQuery, function (err, brokers) {
+    console.log("Broker counts: ", brokers.length);
+
+    // order brokers by Source and property count
+
+    let brokerViewModelArray = brokers.map(function(e) {
+      return {
+        name: e.name, 
+        phone: e.phone,
+        email: e.email,
+        areas: e.areas.join(' | '),
+        sources: e.sources.join(' | '),
+      };
+    });
+
+    return res.send({
+      success: true,
+      brokers: brokerViewModelArray
+    });
   });
 });
 

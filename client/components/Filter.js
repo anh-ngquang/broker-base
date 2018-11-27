@@ -7,6 +7,7 @@ import {
   getFromStorage,
 } from '../utils/storage';
 import BootstrapTable from 'react-bootstrap-table-next';
+import axios from 'axios';
 
 import '../css/Filter.css';
 import '../../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -20,7 +21,8 @@ class Filter extends Component {
       filterArea: [],
       filterBrokerType: [],
       filterPropertyType: [],
-      filterSource: []
+      filterSource: [],
+      brokers: []
     };
   }
 
@@ -71,15 +73,38 @@ class Filter extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
+    const {
+      filterArea,
+      filterBrokerType,
+      filterPropertyType,
+      filterSource
+    } = this.state;
+
+    console.log(filterArea);
+
+    axios.post('/api/broker/filter', {
+      filterArea: filterArea,
+      filterBrokerType: filterBrokerType,
+      filterPropertyType: filterPropertyType,
+      filterSource: filterSource
+    }).then(response => {
+
+      console.log('response data: ', response.data);
+      this.setState({ brokers: response.data.brokers });
+
+    }).catch(error => {
+      console.log('error', error);
+    });
   }
 
   render() {
     const {
       isLoading,
-      token
+      token,
+      brokers
     } = this.state;
 
-    const brokers = [];
     const columns = [{
       dataField: 'name',
       text: 'Tên'
@@ -88,7 +113,9 @@ class Filter extends Component {
       text: 'Số điện thoại'
     }, {
       dataField: 'email',
-      text: 'Email'
+      text: 'Email',
+      headerStyle: { width: '20%' },
+      style: { 'whiteSpace' : 'nowrap', 'overflow': 'hidden', 'textOverflow' : 'ellipsis' }
     }, {
       dataField: 'areas',
       text: 'Khu vực'
@@ -128,7 +155,7 @@ class Filter extends Component {
               <ControlLabel>Loại hình môi giới: </ControlLabel>
               <Select
                 value={this.state.filterBrokerType}
-                onChange={this.handleFilterChange}
+                onChange={this.handleFilterBrokerTypeChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={brokerTypeOptions}
@@ -139,7 +166,7 @@ class Filter extends Component {
               <ControlLabel>Loại hình BĐS: </ControlLabel>
               <Select
                 value={this.state.filterPropertyType}
-                onChange={this.handleFilterChange}
+                onChange={this.handleFilterPropertyTypeChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={propertyTypeOptions}
@@ -150,7 +177,7 @@ class Filter extends Component {
               <ControlLabel>Nguồn: </ControlLabel>
               <Select
                 value={this.state.filterSource}
-                onChange={this.handleFilterChange}
+                onChange={this.handleFilterSourceChange}
                 closeMenuOnSelect={false}
                 isMulti
                 options={sourceOptions}
@@ -168,7 +195,7 @@ class Filter extends Component {
           </Form>
         </Col>
         <Col md={9}>
-          <BootstrapTable wrapperClasses={"brokerTable"} keyField='id' data={brokers} columns={columns} />
+          <BootstrapTable wrapperClasses={"brokerTable"} keyField='phone' data={brokers} columns={columns}/>
         </Col>
 
       </div>
