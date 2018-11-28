@@ -7,10 +7,12 @@ import {
   getFromStorage,
 } from '../utils/storage';
 import BootstrapTable from 'react-bootstrap-table-next';
+import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
 
 import '../css/Filter.css';
 import '../../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import '../../node_modules/react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css';
 
 class Filter extends Component {
   constructor(props) {
@@ -147,7 +149,7 @@ class Filter extends Component {
     }
 
     var filterBtnTitle = (this.state.isFiltering == true) ? "Đang lọc ..." : "Lọc";
-    var resultCountLabel = (this.state.didFilter == true) ? "(" + brokers.length + " kết quả)" : "";
+    var resultCountLabel = (this.state.didFilter == true && this.state.isFiltering == false) ? "(" + brokers.length + " kết quả)" : "";
 
     return (
       <div className="Filter">
@@ -212,10 +214,20 @@ class Filter extends Component {
           </Form>
           <div>
             <h4>{resultCountLabel}</h4>
+            {brokers.length > 0 && (
+              <Button
+                block
+                bsSize="large"
+                bsStyle="primary"
+                type="submit"
+              >
+                Xuất CSV
+            </Button>
+            )}
           </div>
         </Col>
         <Col md={9}>
-          <BootstrapTable wrapperClasses={"brokerTable"} keyField='phone' data={brokers} columns={columns} />
+          <BootstrapTable wrapperClasses={"brokerTable"} keyField='phone' data={brokers} columns={columns} pagination={paginationFactory()} />
         </Col>
 
       </div>
