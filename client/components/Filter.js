@@ -17,12 +17,14 @@ class Filter extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      isFiltering: false,
       token: '',
       filterArea: [],
       filterBrokerType: [],
       filterPropertyType: [],
       filterSource: [],
-      brokers: []
+      brokers: [],
+      didFilter: false
     };
   }
 
@@ -74,14 +76,17 @@ class Filter extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
+    this.setState({
+      isFiltering: true,
+      brokers: []
+    });
+
     const {
       filterArea,
       filterBrokerType,
       filterPropertyType,
       filterSource
     } = this.state;
-
-    console.log(filterArea);
 
     axios.post('/api/broker/filter', {
       filterArea: filterArea,
@@ -91,9 +96,17 @@ class Filter extends Component {
     }).then(response => {
 
       console.log('response data: ', response.data);
-      this.setState({ brokers: response.data.brokers });
+      this.setState({
+        isFiltering: false,
+        brokers: response.data.brokers,
+        didFilter: true
+      });
 
     }).catch(error => {
+      this.setState({
+        isFiltering: false,
+        didFilter: true
+      });
       console.log('error', error);
     });
   }
@@ -101,6 +114,7 @@ class Filter extends Component {
   render() {
     const {
       isLoading,
+      isFiltering,
       token,
       brokers
     } = this.state;
@@ -114,8 +128,8 @@ class Filter extends Component {
     }, {
       dataField: 'email',
       text: 'Email',
-      headerStyle: { width: '20%' },
-      style: { 'whiteSpace' : 'nowrap', 'overflow': 'hidden', 'textOverflow' : 'ellipsis' }
+      headerStyle: { width: '30%' },
+      style: { 'whiteSpace': 'nowrap', 'overflow': 'hidden', 'textOverflow': 'ellipsis' }
     }, {
       dataField: 'areas',
       text: 'Khu vực'
@@ -131,6 +145,9 @@ class Filter extends Component {
     if (!token) {
       return (<Redirect to="/signin" />);
     }
+
+    var filterBtnTitle = (this.state.isFiltering == true) ? "Đang lọc ..." : "Lọc";
+    var resultCountLabel = (this.state.didFilter == true) ? "(" + brokers.length + " kết quả)" : "";
 
     return (
       <div className="Filter">
@@ -188,14 +205,17 @@ class Filter extends Component {
               block
               bsSize="large"
               type="submit"
-              disabled={this.state.isLoading}
+              disabled={this.state.isFiltering}
             >
-              Lọc
-          </Button>
+              {filterBtnTitle}
+            </Button>
           </Form>
+          <div>
+            <h4>{resultCountLabel}</h4>
+          </div>
         </Col>
         <Col md={9}>
-          <BootstrapTable wrapperClasses={"brokerTable"} keyField='phone' data={brokers} columns={columns}/>
+          <BootstrapTable wrapperClasses={"brokerTable"} keyField='phone' data={brokers} columns={columns} />
         </Col>
 
       </div>

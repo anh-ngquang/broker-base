@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Broker = require('../../models/Broker.js');
+var SourceOrder = require('../../models/SourceOrder.js');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
@@ -219,26 +220,64 @@ router.post('/filter', async function (req, res, next) {
     findQuery.sources = { $regex: sourceRegexText }
   }
 
-  await Broker.find(findQuery, function (err, brokers) {
+  await Broker.find(findQuery, async function (err, brokers) {
+
+    if (err) {
+      return res.send({
+        success: false,
+        error: err
+      });
+    }
+
     console.log("Broker counts: ", brokers.length);
 
     // order brokers by Source and property count
+    await SourceOrder.find({}, function (err, sourceOrders) {
+      if (err) {
+        return res.send({
+          success: false,
+          error: err
+        });
+      }
 
-    let brokerViewModelArray = brokers.map(function(e) {
-      return {
-        name: e.name, 
-        phone: e.phone,
-        email: e.email,
-        areas: e.areas.join(' | '),
-        sources: e.sources.join(' | '),
-      };
-    });
+      let brokerViewModelArray = brokers.map(function (e) {
+        return {
+          name: e.name,
+          phone: e.phone,
+          email: e.email,
+          areas: e.areas.join(' | '),
+          sources: e.sources.join(' | '),
+          source_order: getSourceOrder(e.sources, sourceOrders),
+          property_count: e.all_properties.length
+        };
+      });
 
-    return res.send({
-      success: true,
-      brokers: brokerViewModelArray
+      brokerViewModelArray.sort(function(a,b){
+        if(a.source_order == b.source_order){
+          return a.property_count < b.property_count ? 1 : a.property_count > b.property_count ? -1 : 0;
+        }
+      
+        return a.source_order > b.source_order ? 1 : -1;
+      });
+  
+      return res.send({
+        success: true,
+        brokers: brokerViewModelArray
+      });
+
     });
   });
 });
+
+function getSourceOrder(sources, sourceOrders) {
+  let minSourceOrder = 100000;
+  sources.forEach(source => {
+    let sourceOrder = sourceOrders.find(x => x.name === source).order;
+    if (sourceOrder < minSourceOrder) {
+      minSourceOrder = sourceOrder
+    }
+  });
+  return minSourceOrder;
+};
 
 module.exports = router;
