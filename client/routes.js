@@ -5,11 +5,13 @@ import AppliedRoute from './components/AppliedRoute';
 import Import from './components/Import';
 import SignIn from './components/SignIn';
 import Filter from './components/Filter';
+import ExcelToSmsList from './components/ExcelToSmsList';
 
 export const Routes = ({ childProps }) => (
   <Switch>
     <AppliedRoute exact path="/signin" component={SignIn} props={childProps} />
     <AppliedRoute exact path="/import" component={Import} props={childProps} />
+    <AppliedRoute exact path="/excelToSmsList" component={ExcelToSmsList} props={childProps} />
     <AppliedRoute exact path="/"  component={Filter} props={childProps} />
   </Switch>
 );

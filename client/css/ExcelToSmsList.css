@@ -1,0 +1,14 @@
+@media all and (min-width: 480px) {
+    .ExcelToSmsList {
+      padding: 20px 0;
+    }
+  
+    .ExcelToSmsList form {
+      margin: 0 auto;
+      max-width: 800px;
+    }
+    
+    .ExcelToSmsList #convertButton {
+        max-width: 200px;
+    }
+  }

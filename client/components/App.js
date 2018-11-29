@@ -64,10 +64,9 @@ class App extends Component {
               <NavItem>Nhập dữ liệu</NavItem>
             </IndexLinkContainer>
             <NavDropdown title="Công cụ" id="basic-nav-dropdown">
-              <IndexLinkContainer to="/">
-                <MenuItem>Action</MenuItem>
+              <IndexLinkContainer to="/excelToSmsList">
+                <MenuItem>Excel -> SMS List</MenuItem>
               </IndexLinkContainer>
-              <MenuItem>Another action</MenuItem>
             </NavDropdown>
             <NavItem onClick={this.handleLogout}>Đăng xuất</NavItem>
           </Nav>
