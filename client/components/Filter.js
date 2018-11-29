@@ -9,6 +9,7 @@ import {
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import axios from 'axios';
+import ReactExport from "react-data-export";
 
 import '../css/Filter.css';
 import '../../node_modules/react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
@@ -151,6 +152,10 @@ class Filter extends Component {
     var filterBtnTitle = (this.state.isFiltering == true) ? "Đang lọc ..." : "Lọc";
     var resultCountLabel = (this.state.didFilter == true && this.state.isFiltering == false) ? "(" + brokers.length + " kết quả)" : "";
 
+    const ExcelFile = ReactExport.ExcelFile;
+    const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+    const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
     return (
       <div className="Filter">
         <div className="header">
@@ -215,14 +220,26 @@ class Filter extends Component {
           <div>
             <h4>{resultCountLabel}</h4>
             {brokers.length > 0 && (
-              <Button
-                block
-                bsSize="large"
-                bsStyle="primary"
-                type="submit"
-              >
-                Xuất CSV
-            </Button>
+              <ExcelFile
+                filename="brokers"
+                element={
+                  <Button
+                    block
+                    bsSize="large"
+                    bsStyle="primary"
+                    type="submit"
+                  >
+                    Xuất CSV
+                  </Button>
+                }>
+                <ExcelSheet data={brokers} name="Sheet1">
+                  <ExcelColumn label="Tên" value="name" />
+                  <ExcelColumn label="Số điện thoại" value="phone" />
+                  <ExcelColumn label="Email" value="email" />
+                  <ExcelColumn label="Khu vực" value="areas" />
+                  <ExcelColumn label="Nguồn" value="sources" />
+                </ExcelSheet>
+              </ExcelFile>
             )}
           </div>
         </Col>

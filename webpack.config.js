@@ -21,5 +21,12 @@ module.exports = {
             loader: "style-loader!css-loader"
           }
       ]
- }
+ },
+ node: {
+  fs: 'empty'
+  },
+  vendor: [
+    'xlsx',
+    'file-saver'
+],
 }
